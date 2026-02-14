@@ -96,8 +96,8 @@ Ensure you have the following installed on your local machine:
         ```
     *   Update `src/main/resources/application.properties` with your MySQL credentials (if different from default):
         ```properties
-        spring.datasource.username=root
-        spring.datasource.password=12345Shree
+        spring.datasource.username=${yout username}
+        spring.datasource.password=${your password}
         ```
 
 3.  **Build the Project**:
