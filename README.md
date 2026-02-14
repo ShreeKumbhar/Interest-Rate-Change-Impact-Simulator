@@ -33,8 +33,10 @@ This tool is essential for investors and financial planners to visualize the qua
 
 - **Language**: Java 17
 - **Framework**: Spring Boot 3.2.2
+- **Database**: MySQL 8.0+
+- **Persistence**: Spring Data JPA / Hibernate
 - **Build Tool**: Maven
-- **Dependencies**: Spring Web (Starter)
+- **Dependencies**: Spring Web, Spring Data JPA, MySQL Driver
 
 ## 🏗 Project Architecture
 
@@ -57,9 +59,13 @@ interest-rate-simulator/
 │                   ├── InterestRateSimulatorApplication.java  # Main entry point
 │                   ├── controller
 │                   │   └── InterestImpactController.java      # REST Controller
+│                   ├── entity
+│                   │   └── InterestCalculation.java           # JPA Entity
 │                   ├── model
 │                   │   ├── InterestRequest.java               # Request DTO
 │                   │   └── InterestResponse.java              # Response DTO
+│                   ├── repository
+│                   │   └── InterestCalculationRepository.java # JPA Repository
 │                   └── service
 │                       └── InterestImpactService.java         # Business Logic
 └── target/                        # Compiled build artifacts
@@ -71,6 +77,7 @@ Ensure you have the following installed on your local machine:
 
 -   **Java Development Kit (JDK)**: Version 17 or higher.
 -   **Maven**: Version 3.6.0 or higher.
+-   **MySQL Server**: Version 8.0 or higher.
 -   **Postman** (Optional): For API testing.
 
 ## ⚙️ Installation & Setup
@@ -81,12 +88,24 @@ Ensure you have the following installed on your local machine:
     cd interest-rate-simulator
     ```
 
-2.  **Build the Project**:
+2.  **Configure Database**:
+    *   Ensure MySQL is running.
+    *   Create the database:
+        ```sql
+        CREATE DATABASE interestdb;
+        ```
+    *   Update `src/main/resources/application.properties` with your MySQL credentials (if different from default):
+        ```properties
+        spring.datasource.username=root
+        spring.datasource.password=12345Shree
+        ```
+
+3.  **Build the Project**:
     ```bash
     mvn clean install
     ```
 
-3.  **Run the Application**:
+4.  **Run the Application**:
     ```bash
     mvn spring-boot:run
     ```

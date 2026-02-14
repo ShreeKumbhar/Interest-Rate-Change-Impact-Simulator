@@ -1,7 +1,10 @@
 package com.interestratesimulator.service;
 
+import com.interestratesimulator.entity.InterestCalculation;
 import com.interestratesimulator.model.InterestRequest;
 import com.interestratesimulator.model.InterestResponse;
+import com.interestratesimulator.repository.InterestCalculationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -9,6 +12,9 @@ import java.math.RoundingMode;
 
 @Service
 public class InterestImpactService {
+
+    @Autowired
+    private InterestCalculationRepository repository;
 
     public InterestResponse calculateImpact(InterestRequest request) {
         double principal = request.getPrincipal();
@@ -34,6 +40,11 @@ public class InterestImpactService {
         } else {
             message = "No impact due to rate change.";
         }
+
+        // Save to database
+        InterestCalculation entity = new InterestCalculation(
+                principal, currentRate, newRate, years, oldMaturity, newMaturity, difference);
+        repository.save(entity);
 
         return new InterestResponse(oldMaturity, newMaturity, difference, message);
     }
