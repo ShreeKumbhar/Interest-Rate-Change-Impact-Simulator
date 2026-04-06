@@ -1,136 +1,149 @@
-# Interest Rate Impact Simulator
+# 💹 Interest Rate Change Impact Simulator
 
-A robust Spring Boot REST API for financial analysis, specifically designed to simulate and calculate the impact of interest rate changes on fixed-income investments using the compound interest formula.
+> A production-ready **Spring Boot REST API** that empowers investors and financial planners to quantify the real monetary impact of interest rate changes on fixed-income investments — instantly.
 
-## 📋 Table of Contents
+---
 
-- [Project Overview](#project-overview)
-- [Key Features](#key-features)
-- [Tech Stack](#tech-stack)
-- [Project Architecture](#project-architecture)
-- [Folder Structure](#folder-structure)
-- [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation--setup)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
-- [Contact](#contact)
+## 🧑‍💻 About the Project
 
-## 🚀 Project Overview
+Interest rate shifts can silently erode or grow your investment returns. This simulator takes the guesswork out of it.
 
-The **Interest Rate Impact Simulator** allows users to compare the maturity value of an investment under two different interest rate scenarios. By inputting a principal amount, duration, and two interest rates (current and new), the system calculates the maturity values for both scenarios, computes the difference, and provides a descriptive message indicating whether the change results in a gain, loss, or no impact.
+By providing a principal amount, investment duration, and two interest rate scenarios (current vs. proposed), the API calculates maturity values for both scenarios using the **compound interest formula**, computes the financial difference, and delivers a clear, descriptive impact message.
 
-This tool is essential for investors and financial planners to visualize the quantitative effect of rate fluctuations over time.
+**Formula Used:**
+
+$$A = P \left(1 + \frac{r}{100}\right)^t$$
+
+---
 
 ## ✨ Key Features
 
-- **Precise Calculation**: Uses the standard Compound Interest formula $ A = P(1 + \frac{r}{100})^t $.
-- **Impact Analysis**: Automatically determines if a rate change is beneficial or detrimental.
-- **RESTful Architecture**: Clean, resource-oriented API design.
-- **Input Validation**: Ensures robust handling of invalid data (e.g., negative principal or rates).
-- **JSON Response**: Structured, easy-to-parse JSON output for frontend integration.
+| Feature | Description |
+|---|---|
+| 🔢 **Precise Calculation** | Compound interest formula with full floating-point precision |
+| 📊 **Impact Analysis** | Automatically flags whether a rate change is a gain, loss, or neutral |
+| 🏗️ **Clean Architecture** | Layered (Controller → Service → Repository) for maintainability |
+| ✅ **Input Validation** | Handles edge cases like negative values, zero principal, invalid formats |
+| 🗄️ **Persistent Storage** | Every calculation is saved to MySQL via Spring Data JPA |
+| 📦 **JSON API** | Structured response bodies — ready for any frontend or fintech integration |
 
-## 🛠 Tech Stack
+---
 
-- **Language**: Java 17
-- **Framework**: Spring Boot 3.2.2
-- **Database**: MySQL 8.0+
-- **Persistence**: Spring Data JPA / Hibernate
-- **Build Tool**: Maven
-- **Dependencies**: Spring Web, Spring Data JPA, MySQL Driver
+## 🛠️ Tech Stack
 
-## 🏗 Project Architecture
+| Layer | Technology |
+|---|---|
+| Language | Java 17 |
+| Framework | Spring Boot 3.2.2 |
+| Database | MySQL 8.0+ |
+| ORM | Spring Data JPA / Hibernate |
+| Build Tool | Apache Maven |
+| API Style | RESTful (JSON) |
 
-The project follows a standard **Layered Architecture** to ensure separation of concerns and maintainability:
+---
 
-1.  **Controller Layer** (`com.interestratesimulator.controller`): Handles incoming HTTP requests, validates input, and returns responses.
-2.  **Service Layer** (`com.interestratesimulator.service`): Contains the core business logic for interest calculation and comparison.
-3.  **Model Layer** (`com.interestratesimulator.model`): Defines the data structures (DTOs) for requests and responses.
+## 🏗️ Architecture Overview
 
-## 📂 Folder Structure
+The project follows a clean **Layered Architecture** for separation of concerns:
 
-```text
-interest-rate-simulator/
-├── pom.xml                        # Maven dependencies and build configuration
-├── src
-│   └── main
-│       └── java
-│           └── com
-│               └── interestratesimulator
-│                   ├── InterestRateSimulatorApplication.java  # Main entry point
-│                   ├── controller
-│                   │   └── InterestImpactController.java      # REST Controller
-│                   ├── entity
-│                   │   └── InterestCalculation.java           # JPA Entity
-│                   ├── model
-│                   │   ├── InterestRequest.java               # Request DTO
-│                   │   └── InterestResponse.java              # Response DTO
-│                   ├── repository
-│                   │   └── InterestCalculationRepository.java # JPA Repository
-│                   └── service
-│                       └── InterestImpactService.java         # Business Logic
-└── target/                        # Compiled build artifacts
+```
+          HTTP Request
+               │
+               ▼
+┌─────────────────────────────┐
+│     Controller Layer        │  ← Handles HTTP, input validation, response mapping
+│  InterestImpactController   │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│      Service Layer          │  ← Core business logic (compound interest, comparison)
+│   InterestImpactService     │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│    Repository Layer         │  ← Spring Data JPA, persists results to MySQL
+│ InterestCalculationRepo     │
+└──────────────┬──────────────┘
+               │
+               ▼
+          [ MySQL DB ]
 ```
 
-## 📝 Prerequisites
+---
 
-Ensure you have the following installed on your local machine:
+## 📂 Project Structure
 
--   **Java Development Kit (JDK)**: Version 17 or higher.
--   **Maven**: Version 3.6.0 or higher.
--   **MySQL Server**: Version 8.0 or higher.
--   **Postman** (Optional): For API testing.
+```
+interest-rate-simulator/
+├── pom.xml
+└── src/main/java/com/interestratesimulator/
+    ├── InterestRateSimulatorApplication.java   # Entry point
+    ├── controller/
+    │   └── InterestImpactController.java       # REST endpoints
+    ├── entity/
+    │   └── InterestCalculation.java            # JPA Entity (DB table)
+    ├── model/
+    │   ├── InterestRequest.java                # Request DTO
+    │   └── InterestResponse.java               # Response DTO
+    ├── repository/
+    │   └── InterestCalculationRepository.java  # Data access layer
+    └── service/
+        └── InterestImpactService.java          # Business logic
+```
 
-## ⚙️ Installation & Setup
+---
 
-1.  **Clone the Repository** (if using git):
-    ```bash
-    git clone <repository-url>
-    cd interest-rate-simulator
-    ```
+## ⚙️ Getting Started
 
-2.  **Configure Database**:
-    *   Ensure MySQL is running.
-    *   Create the database:
-        ```sql
-        CREATE DATABASE interestdb;
-        ```
-    *   Update `src/main/resources/application.properties` with your MySQL credentials (if different from default):
-        ```properties
-        spring.datasource.username=${yout username}
-        spring.datasource.password=${your password}
-        ```
+### Prerequisites
 
-3.  **Build the Project**:
-    ```bash
-    mvn clean install
-    ```
+- JDK 17+
+- Maven 3.6+
+- MySQL 8.0+
 
-4.  **Run the Application**:
-    ```bash
-    mvn spring-boot:run
-    ```
-    The application will start on **port 8080**.
+### 1. Clone the Repository
 
-## 📖 API Documentation
+```bash
+git clone https://github.com/ShreeKumbhar/Interest-Rate-Change-Impact-Simulator.git
+cd Interest-Rate-Change-Impact-Simulator
+```
 
-### Calculate Interest Impact
+### 2. Configure the Database
 
-Calculates the maturity amounts and the difference based on the provided interest rates.
+```sql
+CREATE DATABASE interestdb;
+```
 
--   **Endpoint**: `/api/interest-impact/calculate`
--   **Method**: `POST`
--   **Content-Type**: `application/json`
+Update `src/main/resources/application.properties`:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/interestdb
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### 3. Build & Run
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+Server starts at: `http://localhost:8080`
+
+---
+
+## 📖 API Reference
+
+### `POST /api/interest-impact/calculate`
+
+Calculates and compares investment maturity under two different interest rate scenarios.
 
 #### Request Body
 
-| Field | Type | Description | Example |
-| :--- | :--- | :--- | :--- |
-| `principal` | `double` | The initial investment amount. Must be > 0. | `500000` |
-| `currentRate` | `double` | The current annual interest rate (in %). Must be >= 0. | `7` |
-| `newRate` | `double` | The proposed new annual interest rate (in %). Must be >= 0. | `6` |
-| `years` | `int` | The investment duration in years. Must be > 0. | `3` |
-
-**Example JSON:**
 ```json
 {
   "principal": 500000,
@@ -140,54 +153,97 @@ Calculates the maturity amounts and the difference based on the provided interes
 }
 ```
 
-#### Response Body
+| Field | Type | Constraints | Description |
+|---|---|---|---|
+| `principal` | double | > 0 | Initial investment amount |
+| `currentRate` | double | ≥ 0 | Current annual interest rate (%) |
+| `newRate` | double | ≥ 0 | Proposed new interest rate (%) |
+| `years` | int | > 0 | Investment duration in years |
 
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| `oldMaturityAmount` | `double` | Maturity value at the current rate. |
-| `newMaturityAmount` | `double` | Maturity value at the new rate. |
-| `difference` | `double` | The monetary difference (`new` - `old`). |
-| `message` | `String` | Impact description. |
+#### Success Response — `200 OK`
 
-**Example JSON:**
 ```json
 {
-    "oldMaturityAmount": 612522.50,
-    "newMaturityAmount": 595508.00,
-    "difference": -17014.50,
-    "message": "Interest rate decrease results in lower returns."
+  "oldMaturityAmount": 612522.50,
+  "newMaturityAmount": 595508.00,
+  "difference": -17014.50,
+  "message": "Interest rate decrease results in lower returns."
 }
 ```
 
-#### Error Response (400 Bad Request)
-If inputs are invalid:
-```text
-Invalid input parameters.
+| Field | Type | Description |
+|---|---|---|
+| `oldMaturityAmount` | double | Maturity value at current rate |
+| `newMaturityAmount` | double | Maturity value at new rate |
+| `difference` | double | Monetary difference (new − old) |
+| `message` | String | Plain-language impact summary |
+
+#### Error Response — `400 Bad Request`
+
+```json
+{
+  "error": "Invalid input parameters."
+}
 ```
 
-## 🧪 Testing
+---
 
-### Option 1: Using cURL
+## 🧪 Testing the API
 
-Open your terminal and run:
+**Using cURL:**
 
 ```bash
 curl -X POST http://localhost:8080/api/interest-impact/calculate \
--H "Content-Type: application/json" \
--d '{
-"principal": 10000,
-"currentRate": 5,
-"newRate": 5.5,
-"years": 5
-}'
+  -H "Content-Type: application/json" \
+  -d '{
+    "principal": 10000,
+    "currentRate": 5,
+    "newRate": 5.5,
+    "years": 5
+  }'
 ```
 
-### Option 2: Using Postman
+**Using Postman:**
+1. Method: `POST`
+2. URL: `http://localhost:8080/api/interest-impact/calculate`
+3. Body → raw → JSON → paste request body
+4. Hit **Send**
 
-1.  **Open Postman** and create a new request.
-2.  Set the **HTTP Method** to `POST`.
-3.  Enter the **URL**: `http://localhost:8080/api/interest-impact/calculate`.
-4.  Switch to the **Body** tab.
-5.  Select **raw** -> **JSON**.
-6.  Paste the Request Body JSON (from the API Documentation section).
-7.  Click **Send**.
+---
+
+## 📌 Sample Scenarios
+
+| Principal | Current Rate | New Rate | Duration | Difference | Impact |
+|---|---|---|---|---|---|
+| ₹5,00,000 | 7% | 6% | 3 years | −₹17,014.50 | 📉 Loss |
+| ₹10,000 | 5% | 5.5% | 5 years | +₹283.75 | 📈 Gain |
+| ₹1,00,000 | 8% | 8% | 10 years | ₹0.00 | ➡️ No Change |
+
+---
+
+## 🔮 Future Enhancements
+
+- [ ] Support for **Simple Interest** mode toggle
+- [ ] Monthly/quarterly **compounding frequency** options
+- [ ] Bulk calculation endpoint (array of scenarios)
+- [ ] Swagger / OpenAPI documentation integration
+- [ ] Dockerized deployment with `docker-compose`
+- [ ] Unit & integration test coverage (JUnit 5 + Mockito)
+
+---
+
+## 👩‍💻 Author
+
+**Shree Kumbhar**
+
+[![GitHub](https://img.shields.io/badge/GitHub-ShreeKumbhar-181717?style=flat&logo=github)](https://github.com/ShreeKumbhar)
+
+---
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE).
+
+---
+
+> *Built to demonstrate hands-on experience with Spring Boot, RESTful API design, JPA persistence, and financial domain logic.*
